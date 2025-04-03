@@ -5,19 +5,21 @@ FROM node:20-alpine
 WORKDIR /app
 
 # Copy package.json and package-lock.json
-COPY package*.json .
+COPY package*.json ./
 
 # Install dependencies
-RUN npm install
+#RUN yarn install
+RUN npm install -g npm
+#RUN npm install
 
 # Copy the rest of the application code
 COPY . .
-#RUN npm build
+
 # Build the application (if there is a build step, for example, with a React app)
-#RUN npm run build
+RUN npm run-script build
 
 # Expose the port the app runs on
 EXPOSE 3000
 
 # Start the application
-CMD ["npm", "start"]
+CMD ["npm", "run-script", "start"]
