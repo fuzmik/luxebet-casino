@@ -1,25 +1,32 @@
-# Use an ARM64-compatible Node.js image
-FROM node:20-alpine
+# Use the official Node.js image as the base image
+FROM node:18-alpine
 
 # Set the working directory
-WORKDIR /app
+WORKDIR /usr/src/app
 
-# Copy package.json and package-lock.json
+# Copy package.json and package-lock.json (or yarn.lock) files
 COPY package*.json ./
+# or if you are using yarn
+# COPY yarn*.lock ./
 
 # Install dependencies
-#RUN yarn install
-RUN npm install -g npm
-#RUN npm install
+RUN npm install
+# or if you are using yarn
+# RUN yarn install
 
 # Copy the rest of the application code
 COPY . .
 
-# Build the application (if there is a build step, for example, with a React app)
-RUN npm run-script build
+# Build the app
+RUN npm run build
+# or if you are using yarn
+# RUN yarn build
+
+# Install serve to serve the build directory
+RUN npm install -g serve
 
 # Expose the port the app runs on
 EXPOSE 3000
 
-# Start the application
-CMD ["npm", "run-script", "start"]
+# Command to run the app
+CMD ["serve", "-s", "build"]
